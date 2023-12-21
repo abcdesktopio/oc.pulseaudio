@@ -163,20 +163,20 @@ RUN DEBIAN_FRONTEND=noninteractive  apt-get update && apt-get install -y --no-in
 #	gstreamer1.0-pulseaudio \
 #	libgstrtspserver-1.0 \
 #	gstreamer1.0-plugins-base \
-#        gir1.2-gst-rtsp-server-1.0 \
+#       gir1.2-gst-rtsp-server-1.0 \
 #	gir1.2-gstreamer-1.0 \
 #	gir1.2-gst-plugins-base-1 \
-#        gstreamer1.0-plugins-rtp \ 
-#        gstreamer1.0-nice \
-#        gstreamer1.0-plugins-bad \
-#        libgstreamer-plugins-bad1.0-0 \
-#        gir1.2-gst-plugins-bad-1.0 \
-#        gstreamer1.0-plugins-ugly \
+#       gstreamer1.0-plugins-rtp \ 
+#       gstreamer1.0-nice \
+#       gstreamer1.0-plugins-bad \
+#       libgstreamer-plugins-bad1.0-0 \
+#       gir1.2-gst-plugins-bad-1.0 \
+#       gstreamer1.0-plugins-ugly \
 #	libwebrtc-audio-processing1 \
 #	python3-pylibsrtp && \
-#        apt-get clean && \
-#        pip3 install websockets && \
-#        pip3 install PyGObject
+#       apt-get clean && \
+#       pip3 install websockets && \
+#       pip3 install PyGObject
 
 # -Db_lto=true -Dpython=enabled -Dgpl=enabled -Dbad=enabled -Dugly=enabled -Dgst-plugins-bad:qsv=enabled -Dgst-plugins-bad:va=enabled -Dgst-plugins-bad:openh264=enabled -Drtsp_server=enabled -Dgst-plugins-ugly:x264=enabled builddir
 

@@ -5,6 +5,9 @@
 ![Docker Pulls](https://img.shields.io/docker/pulls/abcdesktopio/oc.pulseaudio.svg)
 
 
+Sound container for abcdesktop
+- use pulseaudio
+
 
 ## To get more informations
 

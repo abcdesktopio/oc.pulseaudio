@@ -14,26 +14,36 @@ gi.require_version('GstWebRTC', '1.0')
 from gi.repository import GstWebRTC
 gi.require_version('GstSdp', '1.0')
 from gi.repository import GstSdp
+from websockets.version import version as wsv
 
-
-# 
+# pulseaudio config  
 # set config  output_device Virtual_Microphone_Sink
-# pactl load-module module-null-sink sink_name=virtspk sink_properties=device.description=Virtual_Speaker_Sink
-# pactl load-module module-null-sink sink_name=virtmic sink_properties=device.description=Virtual_Microphone_Sink
-# pactl load-module module-remap-source master=virtmic.monitor source_name=virtmic source_properties=device.description=Virtual_Microphone
-# pactl load-module module-remap-source master=virtspk.monitor source_name=virtspk source_properties=device.description=Virtual_Speaker
 #
+# Source https://aweirdimagination.net/2020/07/19/virtual-microphone-using-gstreamer-and-pulseaudio/
+#
+# null sinks to define two new devices which correspond to the remote speaker and microphone
+#
+# virtual speaker
+# load the virtspk
+# load-module module-null-sink sink_name=virtspk sink_properties=device.description=Virtual_Speaker
+#
+# virtual microphone
+# load the virtmic
+# load-module module-null-sink sink_name=virtmic sink_properties=device.description=Virtual_Microphone
+# While the null sink automatically includes a "monitor" source, many programs know to exclude monitors when listing microphones. 
+# To work around that, the module-remap-source module lets us clone that source to another one not labeled as being a monitor:
+#load-module module-null-sink sink_name=virtmic sink_properties=device.description=Virtual_Microphone_Sink
+#load-module module-remap-source master=virtmic.monitor source_name=virtmic source_properties=device.description=Virtual_Microphone
+#
+# for audio in/out
 #PIPELINE_DESC = '''
 #  webrtcbin name=sendrecv bundle-policy=max-bundle stun-server=stun://stun.l.google.com:19302
 #  pulsesrc device=virtmic.monitor ! opusenc ! rtpopuspay ! queue ! 
 #  application/x-rtp,media=audio,encoding-name=OPUS,payload=96 ! sendrecv. 
 #'''
-# pactl load-module module-remap-source master=virtspk.monitor source_name=virtspk source_properties=device.description=Virtual_Speaker_Sink
-
-
-stunserver='' # format stun-server=stun://stun.l.google.com:19302 
-turnserver=''
-
+#
+#
+# for video
 #PIPELINE_DESC = '''
 #webrtcbin name=sendrecv bundle-policy=max-bundle stun-server=stun://stun.l.google.com:19302
 #  videotestsrc is-live=true pattern=ball ! videoconvert ! queue ! vp8enc deadline=1 ! rtpvp8pay !
@@ -41,8 +51,7 @@ turnserver=''
 #  audiotestsrc is-live=true wave=red-noise ! audioconvert ! audioresample ! queue ! opusenc ! rtpopuspay !
 #  queue ! application/x-rtp,media=audio,encoding-name=OPUS,payload=96 ! sendrecv.
 #'''
-
-from websockets.version import version as wsv
+#
 
 
 class WebRTCClient:
@@ -159,8 +168,6 @@ class WebRTCClient:
   # ice-transport-policy=1
   # webrtcbin name=sendrecv bundle-policy=max-bundle {stunserver}
 
-
-
         PIPELINE_DESC = f'''
   webrtcbin name=sendrecv {stunserver} {turnserver}
   pulsesrc device=virtspk.monitor ! opusenc ! rtpopuspay ! queue !
@@ -240,10 +247,7 @@ if __name__=='__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('peerid', help='String ID of the peer to connect to, eg "1"', default=os.environ.get('peerid','1'))
     parser.add_argument('--signallingserver', help='Signalling server to connect to, eg "wss://127.0.0.1:8443"', default=os.environ.get('signallingserver') )
-    parser.add_argument('--stunserver', help='Stun server to connect to, eg "stun://stun.l.google.com:19302"', default=os.environ.get('stunserver', 'stun://stun.l.google.com:19302' ))
     args = parser.parse_args()
-    if isinstance( args.stunserver, str):
-        stunserver = f"stun-server={args.stunserver}"
 
     our_id = random.randrange(10, 10000)
     c = WebRTCClient(our_id, args.peerid, args.signallingserver)

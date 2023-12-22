@@ -54,18 +54,18 @@ load-module module-augment-properties
 #load-module module-oss-mmap device="/dev/dsp" sink_name=output source_name=input
 
 # abcdesktop for http stream
-load-module module-null-sink sink_name=u8_1_11025 format=u8 channels=1 rate=11025 sink_properties="device.description='default format=u8 c=1 rate=11025'"
+# load-module module-null-sink sink_name=u8_1_11025 format=u8 channels=1 rate=11025 sink_properties="device.description='default format=u8 c=1 rate=11025'"
 #load-module module-null-sink sink_name=u8_1_22050 format=u8 channels=1 rate=22050 sink_properties="device.description='default format=u8 c=1 rate=22050'"
 #load-module module-null-sink sink_name=u8_1_44100 format=u8 channels=1 rate=44100 sink_properties="device.description='default format=u8 c=1 rate=44100'"
 #load-module module-null-sink sink_name=s16_1_11025 format=s16be channels=1 rate=11025 sink_properties="device.description='default format=s16be c=1 rate=11025'"
-load-module module-null-sink sink_name=s16_1_22050 format=s16be channels=1 rate=22050 sink_properties="device.description='default format=s16be c=1 rate=22050'"
-load-module module-null-sink sink_name=s16_1_44100 format=s16be channels=1 rate=44100 sink_properties="device.description='default format=s16be c=1 rate=44100'"
-load-module module-null-sink sink_name=ulaw8_1_8000 format=ulaw channels=1 rate=8000 sink_properties="device.description='default format=ulaw c=1 rate=8000'"
+# load-module module-null-sink sink_name=s16_1_22050 format=s16be channels=1 rate=22050 sink_properties="device.description='default format=s16be c=1 rate=22050'"
+# load-module module-null-sink sink_name=s16_1_44100 format=s16be channels=1 rate=44100 sink_properties="device.description='default format=s16be c=1 rate=44100'"
+# load-module module-null-sink sink_name=ulaw8_1_8000 format=ulaw channels=1 rate=8000 sink_properties="device.description='default format=ulaw c=1 rate=8000'"
 #load-module module-null-sink sink_name=alaw8_1_8000 format=alaw channels=1 rate=8000 sink_properties="device.description='default format=alaw c=1 rate=8000'"
 
 
 # abcdesktop for RTP stream
-load-module module-null-sink sink_name=rtp  format=alaw channels=1 rate=8000 sink_properties="device.description='RTP Multicast Sink'"
+# load-module module-null-sink sink_name=rtp  format=alaw channels=1 rate=8000 sink_properties="device.description='RTP Multicast Sink'"
 
 # when add dynamic
 # load-module module-rtp-send source=rtp.monitor destination=TURNSERVER port=XXXX channels=1 format=alaw loop=1
@@ -105,7 +105,7 @@ load-module module-null-sink sink_name=rtp  format=alaw channels=1 rate=8000 sin
 #.ifexists module-esound-protocol-unix.so
 #load-module module-esound-protocol-unix
 #.endif
-load-module module-native-protocol-unix socket=/tmp/.pulse.sock
+# load-module module-native-protocol-unix socket=/tmp/.pulse.sock
 # load-module module-native-protocol-tcp auth-cookie=~/.config/pulse/cookie
 
 ### Network access (may be configured with paprefs, so leave this commented
@@ -146,6 +146,35 @@ load-module module-native-protocol-unix socket=/tmp/.pulse.sock
 # load-module module-rescue-streams
 
 ### Make sure we always have a sink around, even if it is a null sink.
+#load-module module-always-sink
+
+
+load-module module-native-protocol-unix socket=/tmp/.pulse.sock
+# load-module module-http-protocol-tcp 
+# load-module module-native-protocol-tcp auth-anonymous=true
+
+
+#
+# Source https://aweirdimagination.net/2020/07/19/virtual-microphone-using-gstreamer-and-pulseaudio/
+#
+# null sinks to define two new devices which correspond to the remote speaker and microphone
+#
+# virtual speaker
+# load the virtspk
+load-module module-null-sink sink_name=virtspk sink_properties=device.description=Virtual_Speaker
+
+# virtual microphone
+# load the virtmic
+# load-module module-null-sink sink_name=virtmic sink_properties=device.description=Virtual_Microphone
+# While the null sink automatically includes a "monitor" source, many programs know to exclude monitors when listing microphones. 
+# To work around that, the module-remap-source module lets us clone that source to another one not labeled as being a monitor:
+load-module module-null-sink sink_name=virtmic sink_properties=device.description=Virtual_Microphone_Sink
+load-module module-remap-source master=virtmic.monitor source_name=virtmic source_properties=device.description=Virtual_Microphone
+
+
+
+# load-module module-remap-source master=virtmic.monitor source_name=virtmic source_properties=device.description=Virtual_Microphone  
+# load-module module-remap-source master=virtspk.monitor source_name=virtspk source_properties=device.description=Virtual_Speaker
 load-module module-always-sink
 
 ### Honour intended role device property
@@ -193,7 +222,9 @@ load-module module-always-sink
 #.endif
 
 ### Make some devices default
-set-default-sink ulaw8_1_8000
+# set-default-sink ulaw8_1_8000
+set-default-sink virtspk
+set-default-source virtspk
 
 # set-default-sink rtp
 # set-default-source u8_1_11025

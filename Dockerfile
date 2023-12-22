@@ -83,7 +83,8 @@ RUN DEBIAN_FRONTEND=noninteractive  apt-get update && apt-get install -y --no-in
 	libwayland-client0 \
 	libwayland-cursor0 \
         libopenjp2-7 \
-        libxdamage1 && \
+        libxdamage1 \
+	libpython3.10 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 

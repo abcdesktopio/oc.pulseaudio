@@ -161,7 +161,7 @@ RUN chmod 755 /signalling/*
 
 # Add sendrecv
 COPY /sendrecv /sendrecv
-RUN chmod 775 /sendrecv/*
+RUN chmod 755 /sendrecv/*
 
 
 COPY etc/pulse /etc/pulse

@@ -22,7 +22,7 @@ jobs:
         with:
           file: Dockerfile.gstreamer 
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: abcdesktopio/oc.pulseaudio:gstreamer
       - name: Build and push

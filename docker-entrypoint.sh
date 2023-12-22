@@ -31,6 +31,9 @@ export LC_ALL=C
 
 # create the pulse/cookie
 # do not let pulseaudio to create it
+# pulse audio cookie is shared with others containers
+# like application containers and X11 container
+# create the pulse audio cookie from $PULSEAUDIO_COOKIE value
 if [ ! -z "$PULSEAUDIO_COOKIE" ]; then
 	echo "creating /etc/pulse/abcdesktopcookie file from PULSEAUDIO_COOKIE env"
 	# clear file content
@@ -47,19 +50,14 @@ fi
 # --disable-shm=true
 
 # Start signalling
+# signalling is a simple webrtc signalling server 
 /bin/python3 /signalling/simple_server.py --disable-ssl --addr ${POD_IP} --port 29787 > /tmp/signalling.log &
 
 # Start webrtc_sendrecv
 # python3 /sendrecv/webrtc_sendrecv.py --signallingserver ws://${POD_IP}:29787 front.abcdesktop &
-
 /sendrecv/loop_sendrecv.sh &
 
-# pactl load-module module-null-sink sink_name=virtspk sink_properties=device.description=Virtual_Speaker_Sink
-# pactl load-module module-null-sink sink_name=virtmic sink_properties=device.description=Virtual_Microphone_Sink
-# pactl load-module module-remap-source master=virtmic.monitor source_name=virtmic source_properties=device.description=Virtual_Microphone
-# pactl load-module module-remap-source master=virtspk.monitor source_name=virtspk source_properties=device.description=Virtual_Speaker
-# /bin/sleep 1d
+# Start pulse audio with module-native-protocol-tcp listening on POP_IP address
+# other modules module-null-sink are loaded in the /etc/pulse/default.pa file
+# for virtual speaker and virtual microphone
 /usr/bin/pulseaudio --realtime=true --load="module-native-protocol-tcp listen=$POD_IP auth-cookie=/etc/pulse/abcdesktopcookie" --log-level=4 -vvvv 
-# listen=$CONTAINER_IP_ADDR auth-cookie=/etc/pulse/abcdesktopcookie"
-	
-#/usr/bin/pulseaudio --load="module-http-protocol-tcp listen=$CONTAINER_IP_ADDR"  --load="module-native-protocol-tcp listen=$CONTAINER_IP_ADDR auth-anonymous=true"

@@ -154,16 +154,17 @@ class WebRTCClient:
   # “stun-server” gchararray
   # The STUN server of the form stun://hostname:port
   
-        stunserver = '' # default value 
-        turnserver = '' # default value 
-
         stunserver = os.environ.get('STUN_SERVER')
         if isinstance( stunserver, str ):
             stunserver = 'stun-server=' + stunserver
+        else:
+            stunserver = ''
 
         turnserver = os.environ.get('TURN_SERVER')
         if isinstance( turnserver, str ):
             turnserver = 'turn-server=' + turnserver
+        else:
+            turnserver = ''
 
   # ice-transport-policy=1
   # webrtcbin name=sendrecv bundle-policy=max-bundle {stunserver}

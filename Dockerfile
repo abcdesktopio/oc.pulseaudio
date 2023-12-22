@@ -43,7 +43,10 @@ RUN DEBIAN_FRONTEND=noninteractive  apt-get update && apt-get install -y --no-in
 COPY --from=abcdesktopio/oc.pulseaudio:gstreamer /opt/gstreamer/bin /bin
 COPY --from=abcdesktopio/oc.pulseaudio:gstreamer /opt/gstreamer/lib /lib
 ENV GSTREAMER_PATH=/
-ENV GI_TYPELIB_PATH=/lib/x86_64-linux-gnu/girepository-1.0:/usr/lib/x86_64-linux-gnu/girepository-1.0
+# prevent twice define
+# ENV GI_TYPELIB_PATH=/lib/x86_64-linux-gnu/girepository-1.0:/usr/lib/x86_64-linux-gnu/girepository-1.0
+# lrwxrwxrwx   1 root root       7 Dec 11 14:04 lib -> usr/lib
+ENV GI_TYPELIB_PATH=/lib/x86_64-linux-gnu/girepository-1.0
 ENV PYTHONPATH=/lib/python3/dist-packages
 
 

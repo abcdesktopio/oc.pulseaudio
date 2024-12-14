@@ -48,7 +48,10 @@ RUN mkdir -p /etc/apt/keyrings && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# compy source code
+
+COPY etc /etc
+
+# copy source code
 COPY composer /composer
 
 # install wait-port

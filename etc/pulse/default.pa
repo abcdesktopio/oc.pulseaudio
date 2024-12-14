@@ -54,24 +54,24 @@ load-module module-augment-properties
 #load-module module-oss-mmap device="/dev/dsp" sink_name=output source_name=input
 
 # abcdesktop for http stream
-load-module module-null-sink sink_name=u8_1_11025 format=u8 channels=1 rate=11025 sink_properties="device.description='default format=u8 c=1 rate=11025'"
+# load-module module-null-sink sink_name=u8_1_11025 format=u8 channels=1 rate=11025 sink_properties="device.description='default format=u8 c=1 rate=11025'"
 #load-module module-null-sink sink_name=u8_1_22050 format=u8 channels=1 rate=22050 sink_properties="device.description='default format=u8 c=1 rate=22050'"
 #load-module module-null-sink sink_name=u8_1_44100 format=u8 channels=1 rate=44100 sink_properties="device.description='default format=u8 c=1 rate=44100'"
 #load-module module-null-sink sink_name=s16_1_11025 format=s16be channels=1 rate=11025 sink_properties="device.description='default format=s16be c=1 rate=11025'"
-load-module module-null-sink sink_name=s16_1_22050 format=s16be channels=1 rate=22050 sink_properties="device.description='default format=s16be c=1 rate=22050'"
-load-module module-null-sink sink_name=s16_1_44100 format=s16be channels=1 rate=44100 sink_properties="device.description='default format=s16be c=1 rate=44100'"
-load-module module-null-sink sink_name=ulaw8_1_8000 format=ulaw channels=1 rate=8000 sink_properties="device.description='default format=ulaw c=1 rate=8000'"
+#load-module module-null-sink sink_name=s16_1_22050 format=s16be channels=1 rate=22050 sink_properties="device.description='default format=s16be c=1 rate=22050'"
+#load-module module-null-sink sink_name=s16_1_44100 format=s16be channels=1 rate=44100 sink_properties="device.description='default format=s16be c=1 rate=44100'"
+#load-module module-null-sink sink_name=ulaw8_1_8000 format=ulaw channels=1 rate=8000 sink_properties="device.description='default format=ulaw c=1 rate=8000'"
 #load-module module-null-sink sink_name=alaw8_1_8000 format=alaw channels=1 rate=8000 sink_properties="device.description='default format=alaw c=1 rate=8000'"
 
 
 # abcdesktop for RTP stream
-load-module module-null-sink sink_name=rtp  format=alaw channels=1 rate=8000 sink_properties="device.description='RTP Multicast Sink'"
+# load-module module-null-sink sink_name=rtp  format=alaw channels=1 rate=8000 sink_properties="device.description='RTP Multicast Sink'"
 
 # when add dynamic
 # load-module module-rtp-send source=rtp.monitor destination=TURNSERVER port=XXXX channels=1 format=alaw loop=1
 
 # load-module module-pipe-sink
-# load-module module-null-sink sink_name=auto_null format=s16le channels=1 rate=22050 sink_properties="device.description='default auto_null'"
+load-module module-null-sink sink_name=auto_null sink_properties="device.description='default auto_null'"
 
 ### Automatically load driver modules depending on the hardware available
 #.ifexists module-udev-detect.so
@@ -193,7 +193,7 @@ load-module module-always-sink
 #.endif
 
 ### Make some devices default
-set-default-sink ulaw8_1_8000
+set-default-sink auto_null
 
 # set-default-sink rtp
 # set-default-source u8_1_11025

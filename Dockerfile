@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu
 
 # take care with the ubuntu:18.04
 # On 20.04 and 22.04
@@ -28,12 +28,15 @@ RUN groupadd --gid $PULSEGID $PULSEUSER
 RUN useradd --create-home --shell /bin/bash --uid $PULSEUID -g $PULSEUSER --groups sudo $PULSEUSER
 
 RUN DEBIAN_FRONTEND=noninteractive  apt-get update && apt-get install -y --no-install-recommends\
+	ca-certificates \
         pulseaudio \
         pulseaudio-utils \
-	dbus \
 	supervisor \
-	ffmpeg	\			
-        && apt-get clean		
+	ffmpeg \
+	gnupg \
+	curl && \
+        apt-get clean && \
+    	rm -rf /var/lib/apt/lists/*		
 
 ENV NODE_MAJOR=20
 
@@ -63,13 +66,18 @@ RUN npm install --omit=dev && npm audit fix
 
 WORKDIR /
 
+
+RUN mkdir -p /var/log/desktop /var/run/desktop
+
 ## DBUS SECTION
-RUN 	mkdir -p /var/run/dbus 		&& \
+RUN 	mkdir -p /var/run/dbus /var/log/desktop  /var/run/desktop && \
 	touch /var/lib/dbus/machine-id  && \
 	chown -R $PULSEUSER:$PULSEGROUP     \
                 /var/run/dbus              \
                 /var/lib/dbus              \
-                /var/lib/dbus/machine-id
+                /var/lib/dbus/machine-id \
+		/var/log/desktop \
+		/var/run/desktop
 
 COPY etc/pulse /etc/pulse
 RUN  chown -R $PULSEUID:$PULSEGID /etc/pulse && \

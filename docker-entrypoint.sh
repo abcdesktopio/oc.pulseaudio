@@ -19,12 +19,10 @@ ls -la $HOME        >> ${ABCDESKTOP_LOG_DIR}/docker-entrypoint-pulseaudio.log
 echo "ls done"      >> ${ABCDESKTOP_LOG_DIR}/docker-entrypoint-pulseaudio.log
 ls -la /etc/pulse   >> ${ABCDESKTOP_LOG_DIR}/docker-entrypoint-pulseaudio.log
 
-CONTAINER_IP_ADDR=$(hostname -i)
+# Read first $POD_IP if not set get from hostname -i ip addr
+export CONTAINER_IP_ADDR=${POD_IP:-$(hostname -i)}
 echo "Container local ip addr is $CONTAINER_IP_ADDR" >> ${ABCDESKTOP_LOG_DIR}/docker-entrypoint-pulseaudio.log
-export CONTAINER_IP_ADDR
 export LC_ALL=C
-
-
 
 # create the pulse/cookie
 # do not let pulseaudio to create it
@@ -39,7 +37,11 @@ else
  	echo "error PULSEAUDIO_COOKIE is not defined, sound goes wrong"
 fi
 
-# --disable-shm=true
+export WEBRELAY_INTERNAL_TCP_PORT=29780
 
-/usr/bin/pulseaudio --load="module-http-protocol-tcp listen=$CONTAINER_IP_ADDR"  --load="module-native-protocol-tcp listen=$CONTAINER_IP_ADDR auth-cookie=/etc/pulse/abcdesktopcookie" 
+# start supervisord
+/usr/bin/supervisord --pidfile /var/run/desktop/pulseaudio.pid --nodaemon --configuration /etc/supervisord.conf
+
+# --disable-shm=true
+# /usr/bin/pulseaudio --load="module-http-protocol-tcp listen=$CONTAINER_IP_ADDR"  --load="module-native-protocol-tcp listen=$CONTAINER_IP_ADDR auth-cookie=/etc/pulse/abcdesktopcookie" 
 #/usr/bin/pulseaudio --load="module-http-protocol-tcp listen=$CONTAINER_IP_ADDR"  --load="module-native-protocol-tcp listen=$CONTAINER_IP_ADDR auth-anonymous=true"

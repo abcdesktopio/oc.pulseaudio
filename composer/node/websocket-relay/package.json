@@ -1,0 +1,11 @@
+{
+  "name": "websocket-relay",
+  "main": "websocket-relay.js",
+  "private": true,
+  "license": "GNU GPL 2",
+  "version": "0.0.1",
+  "description": "websocket-relay",
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}

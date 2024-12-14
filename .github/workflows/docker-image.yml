@@ -1,9 +1,7 @@
 name: Update oc.pulseaudio
 on:
   push:
-    branches:
-      - main
-      - '3.1'
+
 env:
     imagetag: "${{ github.event.client_payload.ref || github.ref_name }}"  
 jobs:

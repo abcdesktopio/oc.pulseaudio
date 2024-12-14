@@ -40,7 +40,7 @@ fi
 export WEBRELAY_INTERNAL_TCP_PORT=29780
 
 # start supervisord
-/usr/bin/supervisord --pidfile /var/run/desktop/pulseaudio.pid --nodaemon --configuration /etc/supervisord.conf
+/usr/bin/supervisord --pidfile /var/run/desktop/supervisord.pid --nodaemon --configuration /etc/supervisord.conf
 
 # --disable-shm=true
 # /usr/bin/pulseaudio --load="module-http-protocol-tcp listen=$CONTAINER_IP_ADDR"  --load="module-native-protocol-tcp listen=$CONTAINER_IP_ADDR auth-cookie=/etc/pulse/abcdesktopcookie" 

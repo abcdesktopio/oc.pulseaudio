@@ -100,7 +100,7 @@ RUN echo `date` > /etc/build.date
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 USER pulse
-CMD /docker-entrypoint.sh
+CMD [ "/docker-entrypoint.sh" ]
 # CMD ["/bin/sleep", "3600"]
 
 # expose websockert tcp port

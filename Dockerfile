@@ -66,23 +66,33 @@ RUN npm install --omit=dev && npm audit fix
 
 WORKDIR /
 
-
-RUN mkdir -p /var/log/desktop /var/run/desktop
-
-## DBUS SECTION
-RUN 	mkdir -p /var/run/dbus /var/log/desktop  /var/run/desktop && \
+RUN 	mkdir -p \
+		/var/run/dbus \
+		/var/log/desktop \
+		/var/run/desktop \
+		/var/run/local \
+		/var/log/local && \
 	touch /var/lib/dbus/machine-id  && \
-	chown -R $PULSEUSER:$PULSEGROUP     \
+	chmod   777     \
                 /var/run/dbus              \
                 /var/lib/dbus              \
                 /var/lib/dbus/machine-id \
 		/var/log/desktop \
-		/var/run/desktop
+		/var/run/desktop \
+		/var/run/local \
+		/var/log/local 
 
-COPY etc/pulse /etc/pulse
-RUN  chown -R $PULSEUID:$PULSEGID /etc/pulse && \
+RUN  chmod 777 /etc/pulse && \
      touch /etc/pulse/abcdesktopcookie && \
-     chmod 777 /etc/pulse/abcdesktopcookie 
+     chmod 666 /etc/pulse/abcdesktopcookie 
+
+
+ENV ABCDESKTOP_LOCALACCOUNT_DIR "/etc/localaccount"
+RUN mkdir -p $ABCDESKTOP_LOCALACCOUNT_DIR && \
+    for f in passwd shadow group gshadow ; do if [ -f /etc/$f ] ; then  cp /etc/$f $ABCDESKTOP_LOCALACCOUNT_DIR ; rm -f /etc/$f; ln -s $ABCDESKTOP_LOCALACCOUNT_DIR/$f /etc/$f; fi; done
+
+
+ENV PULSE_SERVER=/tmp/.pulse.sock
 
 # hack: be shure to own the home dir 
 RUN chown -R $PULSEUSER:$PULSEGROUP /home/$PULSEUSER
@@ -91,6 +101,7 @@ RUN echo `date` > /etc/build.date
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 USER pulse
 CMD /docker-entrypoint.sh
+# CMD ["/bin/sleep", "3600"]
 
 # expose websockert tcp port
 EXPOSE 29788

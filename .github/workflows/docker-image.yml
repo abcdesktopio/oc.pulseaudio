@@ -25,4 +25,4 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: abcdesktopio/oc.puleeaudio:${{ env.imagetag }}
+          tags: abcdesktopio/oc.pulseaudio:${{ env.imagetag }}

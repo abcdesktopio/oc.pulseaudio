@@ -23,7 +23,7 @@ var STREAM_SECRET = process.argv[2],
 
 // process.env.SPAWNER_SERVICE_TCP_PORT
 // Websocket Server
-const host = process.env.CONTAINER_IP_ADDR || '127.0.0.1';
+const host = process.env.CONTAINER_IP_ADDR || '0.0.0.0';
 
 var socketServer = new WebSocket.Server({ host: host, port: WEBSOCKET_PORT, perMessageDeflate: false});
 socketServer.connectionCount = 0;

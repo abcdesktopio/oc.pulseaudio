@@ -18,9 +18,10 @@ Please, read the public documentation web site:
 ## Sound service for abcdesktop.io for kubernetes
 
 ```
-git clone git://github.com/abcdesktopio/oc.pulseaudio
+BRANCH=3.5
+git clone -b $BRANCH git://github.com/abcdesktopio/oc.pulseaudio
 cd oc.pulseaudio
-git submodule update --init --recursive --remote
+docker build -t abcdesktopio/oc.pulseaudio:$BRANCH .
 ```
 
 

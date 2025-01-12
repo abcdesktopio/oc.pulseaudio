@@ -58,7 +58,7 @@ COPY etc /etc
 COPY composer /composer
 
 # install wait-port
-RUN npm install -g wait-port 
+# RUN npm install -g wait-port 
 
 # install websocket-relay
 WORKDIR /composer/node/websocket-relay

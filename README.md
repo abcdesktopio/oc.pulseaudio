@@ -20,16 +20,14 @@ Please, read the public documentation web site:
 ```
 BRANCH=3.5
 git clone -b $BRANCH git://github.com/abcdesktopio/oc.pulseaudio
-cd oc.pulseaudio
-docker build -t abcdesktopio/oc.pulseaudio:$BRANCH .
 ```
-
-
 
 ### build `oc.pulseaudio` image
 
 ```
-docker build -t abcdesktopio/oc.pulseaudio:dev .
+cd oc.pulseaudio
+BRANCH=3.5
+docker build -t abcdesktopio/oc.pulseaudio:$BRANCH .
 ```
 
 

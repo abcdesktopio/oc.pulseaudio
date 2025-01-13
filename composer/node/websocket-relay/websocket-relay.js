@@ -1,3 +1,5 @@
+// source froml https://github.com/phoboslab/jsmpeg
+//
 // Use the websocket-relay to serve a raw MPEG-TS over WebSockets. You can use
 // ffmpeg to feed the relay. ffmpeg -> websocket-relay -> browser
 // Example:
@@ -33,7 +35,7 @@ var supervisord_client = supervisord.connect('unix://var/run/desktop/supervisor.
 // process.env.SPAWNER_SERVICE_TCP_PORT
 // Websocket Server
 const host = process.env.CONTAINER_IP_ADDR || '0.0.0.0';
-console.log( "host=", host );
+console.log( "listening on host=", host );
 
 var socketServer = new WebSocket.Server({ host: host, port: WEBSOCKET_PORT, perMessageDeflate: false});
 socketServer.connectionCount = 0;

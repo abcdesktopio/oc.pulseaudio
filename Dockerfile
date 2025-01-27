@@ -60,9 +60,16 @@ COPY composer /composer
 # install wait-port
 # RUN npm install -g wait-port 
 
-# install websocket-relay
-WORKDIR /composer/node/websocket-relay
+# install websocket-relay speaker
+WORKDIR /composer/node/websocket-relay.speaker
 RUN npm install --omit=dev && npm audit fix
+
+# install websocket-relay microphone
+WORKDIR /composer/node/websocket-relay.microphone
+RUN npm install --omit=dev && npm audit fix
+
+
+
 
 WORKDIR /
 
@@ -91,6 +98,7 @@ ENV ABCDESKTOP_LOCALACCOUNT_DIR "/etc/localaccount"
 RUN mkdir -p $ABCDESKTOP_LOCALACCOUNT_DIR && \
     for f in passwd shadow group gshadow ; do if [ -f /etc/$f ] ; then  cp /etc/$f $ABCDESKTOP_LOCALACCOUNT_DIR ; rm -f /etc/$f; ln -s $ABCDESKTOP_LOCALACCOUNT_DIR/$f /etc/$f; fi; done
 
+RUN mkdir -m 777 /container
 
 ENV PULSE_SERVER=/tmp/.pulse.sock
 
@@ -101,7 +109,5 @@ RUN echo `date` > /etc/build.date
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 USER pulse
 CMD [ "/docker-entrypoint.sh" ]
-# CMD ["/bin/sleep", "3600"]
-
 # expose websockert tcp port
 EXPOSE 29788

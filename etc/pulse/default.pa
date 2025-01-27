@@ -19,6 +19,10 @@
 # This startup script is used only if PulseAudio is started per-user
 # (i.e. not in system mode)
 
+
+
+
+
 .nofail
 # default-sample-format= The default sampling format. Specify one of u8, s16le, s16be, s24le, s24be, s24-32le, s24-32be, s32le, s32be float32le, float32be, ulaw, alaw. Depending on the endianness of the CPU the formats s16ne, s16re, s24ne, s24re, s24-32ne, s24-32re, s32ne, s32re, float32ne, float32re (for native, resp. reverse endian) are available as aliases.
 #default-sample-format=u8
@@ -69,9 +73,28 @@ load-module module-augment-properties
 
 # when add dynamic
 # load-module module-rtp-send source=rtp.monitor destination=TURNSERVER port=XXXX channels=1 format=alaw loop=1
-
 # load-module module-pipe-sink
-load-module module-null-sink sink_name=auto_null sink_properties="device.description='default auto_null'"
+
+
+#
+# from https://aweirdimagination.net/tag/webrtc/
+#
+# pactl load-module module-null-sink sink_name=virtspk  sink_properties=device.description=Virtual_Speaker
+# pactl load-module module-null-sink sink_name=virtmic  sink_properties=device.description=Virtual_Microphone_Sink
+# pactl load-module module-remap-source master=virtmic.monitor source_name=virtmic source_properties=device.description=Virtual_Microphone
+
+# virtual speaker
+
+load-module module-null-sink sink_name=speaker sink_properties="device.description='default speaker'"
+load-module module-pipe-source source_name=microphone file=/container/microphone source_properties=device.description=virtual_microphone format=float32le rate=44100 channels=1
+
+# virtual microphone
+# load the virtmic
+# load-module module-null-sink sink_name=virtmic sink_properties=device.description=Virtual_Microphone
+# While the null sink automatically includes a "monitor" source, many programs know to exclude monitors when listing microphones. 
+# To work around that, the module-remap-source module lets us clone that source to another one not labeled as being a monitor:
+# load-module module-null-sink sink_name=virtmic sink_properties=device.description=Virtual_Microphone_Sink
+# load-module module-remap-source master=virtmic.monitor source_name=virtmic source_properties=device.description=Virtual_Microphone
 
 ### Automatically load driver modules depending on the hardware available
 #.ifexists module-udev-detect.so
@@ -193,10 +216,10 @@ load-module module-always-sink
 #.endif
 
 ### Make some devices default
-set-default-sink auto_null
+set-default-sink speaker
+set-default-source microphone
 
 # set-default-sink rtp
 # set-default-source u8_1_11025
 
-# pactl set-default-sink u8_1_22050
 # pacmd play-sample sample_u8_1_44100 u8_1_22050

@@ -39,6 +39,11 @@ fi
 
 export WEBRELAY_INTERNAL_TCP_PORT=29780
 
+
+#
+mkfifo /container/speaker
+# mkfifo /container/microphone
+
 # start supervisord
 /usr/bin/supervisord --pidfile /var/run/desktop/supervisord.pid --nodaemon --configuration /etc/supervisord.conf
 

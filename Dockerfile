@@ -28,14 +28,15 @@ RUN useradd --create-home --shell /bin/bash --uid $PULSEUID -g $PULSEUSER --grou
 
 RUN DEBIAN_FRONTEND=noninteractive  apt-get update && apt-get install -y --no-install-recommends\
 	ca-certificates \
-        pulseaudio \
-        pulseaudio-utils \
+    pulseaudio \
+    pulseaudio-utils \
 	supervisor \
+	libnss-extrausers \
 	ffmpeg \
 	gnupg \
 	curl && \
-        apt-get clean && \
-    	rm -rf /var/lib/apt/lists/*
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 ENV NODE_MAJOR=20
 

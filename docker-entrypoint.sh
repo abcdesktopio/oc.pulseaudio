@@ -14,11 +14,6 @@ export ABCDESKTOP_RUN_DIR=${ABCDESKTOP_RUN_DIR:-'/var/run/desktop'}
 id  >  ${ABCDESKTOP_LOG_DIR}/docker-entrypoint-pulseaudio.log
 env >> ${ABCDESKTOP_LOG_DIR}/docker-entrypoint-pulseaudio.log
 
-echo "ls -la $HOME" >> ${ABCDESKTOP_LOG_DIR}/docker-entrypoint-pulseaudio.log
-ls -la $HOME        >> ${ABCDESKTOP_LOG_DIR}/docker-entrypoint-pulseaudio.log
-echo "ls done"      >> ${ABCDESKTOP_LOG_DIR}/docker-entrypoint-pulseaudio.log
-ls -la /etc/pulse   >> ${ABCDESKTOP_LOG_DIR}/docker-entrypoint-pulseaudio.log
-
 # Read first $POD_IP if not set get from hostname -i ip addr
 export CONTAINER_IP_ADDR=${POD_IP:-$(hostname -i)}
 echo "Container local ip addr is $CONTAINER_IP_ADDR" >> ${ABCDESKTOP_LOG_DIR}/docker-entrypoint-pulseaudio.log

@@ -92,11 +92,6 @@ RUN  chmod 777 /etc/pulse && \
      touch /etc/pulse/abcdesktopcookie && \
      chmod 666 /etc/pulse/abcdesktopcookie
 
-
-ENV ABCDESKTOP_LOCALACCOUNT_DIR="/etc/localaccount"
-RUN mkdir -p $ABCDESKTOP_LOCALACCOUNT_DIR && \
-    for f in passwd shadow group gshadow ; do if [ -f /etc/$f ] ; then  cp /etc/$f $ABCDESKTOP_LOCALACCOUNT_DIR ; rm -f /etc/$f; ln -s $ABCDESKTOP_LOCALACCOUNT_DIR/$f /etc/$f; fi; done
-
 RUN mkdir -m 777 /container
 
 ENV PULSE_SERVER=/tmp/.pulse.sock

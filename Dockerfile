@@ -1,4 +1,4 @@
-FROM ubuntu:resolute
+FROM ubuntu:26.04
 
 # take care with the ubuntu:18.04
 # On 20.04 and 22.04
@@ -28,8 +28,10 @@ RUN useradd --create-home --shell /bin/bash --uid $PULSEUID -g $PULSEUSER --grou
 
 RUN DEBIAN_FRONTEND=noninteractive  apt-get update && apt-get install -y --no-install-recommends\
 	ca-certificates \
-    pulseaudio \
-    pulseaudio-utils \
+    	pipewire \
+    	pipemixer \ 
+        pipewire-audio \
+        pipewire-audio-client-libraries  \
 	supervisor \
 	libnss-extrausers \
 	ffmpeg \

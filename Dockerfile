@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:26.04
 
 # take care with the ubuntu:18.04
 # On 20.04 and 22.04
@@ -25,29 +25,27 @@ RUN groupadd --gid $PULSEGID $PULSEUSER
 RUN useradd --create-home --shell /bin/bash --uid $PULSEUID -g $PULSEUSER --groups sudo $PULSEUSER
 RUN DEBIAN_FRONTEND=noninteractive  apt-get update && apt-get install -y --no-install-recommends \
 	ca-certificates \
-    pulseaudio \
-    pulseaudio-utils \
+	pulseaudio \
+	pulseaudio-utils \
 	supervisor \
 	libnss-extrausers \
 	ffmpeg \
 	gnupg \
+	alsa-utils \
 	curl && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*		
 
-ENV NODE_MAJOR=20
 
-# install npm nodejs 
+ENV NODE_MAJOR=24
+
+# install npm nodejs
 # install nodejs
-RUN mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends nodejs && \
-    npm install -g npm && \
-    apt-get clean && \
+# install nodejs 
+RUN curl -fsSL https://deb.nodesource.com/setup_$NODE_MAJOR.x | bash - && \
+    apt-get update && apt-get install -y --no-install-recommends nodejs && \
+    apt-get clean && \ 
     rm -rf /var/lib/apt/lists/*
-
 
 COPY etc /etc
 

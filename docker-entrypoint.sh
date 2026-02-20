@@ -13,6 +13,8 @@ export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-'/tmp/runtime'}
 export DISABLE_RTKIT=${DISABLE_RTKIT:-'y'}
 export DISPLAY=${DISPLAY:'0.0'}
 
+# create XDG_RUNTIME_DIR if not exist
+mkdir -p ${XDG_RUNTIME_DIR}
 
 # dump for debug
 id  >  ${ABCDESKTOP_LOG_DIR}/docker-entrypoint-pulseaudio.log

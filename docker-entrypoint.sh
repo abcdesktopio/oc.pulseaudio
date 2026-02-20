@@ -9,19 +9,6 @@
 
 export ABCDESKTOP_LOG_DIR=${ABCDESKTOP_LOG_DIR:-'/var/log/desktop'}
 export ABCDESKTOP_RUN_DIR=${ABCDESKTOP_RUN_DIR:-'/var/run/desktop'}
-export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-'/tmp/runtime'}
-export DISABLE_RTKIT=${DISABLE_RTKIT:-'y'}
-export DISPLAY=${DISPLAY:'0.0'}
-
-# create XDG_RUNTIME_DIR if not exist
-if [ ! -d "${XDG_RUNTIME_DIR}" ]; then
-  mkdir -p "${XDG_RUNTIME_DIR}"
-  chmod 0700 "${XDG_RUNTIME_DIR}"
-fi   
-
-# dump for debug
-id  >  ${ABCDESKTOP_LOG_DIR}/docker-entrypoint-pulseaudio.log
-env >> ${ABCDESKTOP_LOG_DIR}/docker-entrypoint-pulseaudio.log
 
 # Read first $POD_IP if not set get from hostname -i ip addr
 export CONTAINER_IP_ADDR=${POD_IP:-$(hostname -i)}

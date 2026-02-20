@@ -6,7 +6,8 @@
 
 
 Sound container for abcdesktop
-- use pulseaudio
+- use pipewire
+- use pipewire-pulse
 
 
 ## To get more informations

@@ -31,6 +31,7 @@ RUN DEBIAN_FRONTEND=noninteractive  apt-get update && apt-get install -y --no-in
 	libnss-extrausers \
 	ffmpeg \
 	gnupg \
+	libnss-extrausers \
 	curl && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*		
@@ -53,6 +54,8 @@ COPY etc /etc
 
 # copy source code
 COPY composer /composer
+# copy nsswitch.conf
+COPY etc/nsswitch.conf /etc/nsswitch.conf
 
 # install wait-port
 # RUN npm install -g wait-port 
@@ -65,32 +68,14 @@ RUN npm install --omit=dev && npm audit fix
 WORKDIR /composer/node/websocket-relay.microphone
 RUN npm install --omit=dev && npm audit fix
 
-
-
-
 WORKDIR /
 
-RUN 	mkdir -p \
-		/var/run/dbus \
-		/var/log/desktop \
-		/var/run/desktop \
-		/var/run/local \
-		/var/log/local && \
+RUN mkdir -p --mode=777 /var/run/dbus /var/log/desktop /var/run/desktop /var/run/local /var/log/local && \
 	touch /var/lib/dbus/machine-id  && \
-	chmod   777     \
-                /var/run/dbus              \
-                /var/lib/dbus              \
-                /var/lib/dbus/machine-id \
-		/var/log/desktop \
-		/var/run/desktop \
-		/var/run/local \
-		/var/log/local 
-
-RUN  chmod 777 /etc/pulse && \
-     touch /etc/pulse/abcdesktopcookie && \
-     chmod 666 /etc/pulse/abcdesktopcookie 
-
-RUN mkdir -m 777 /container
+	chmod 777  /var/lib/dbus /var/lib/dbus/machine-id /etc/pulse && \
+    touch /etc/pulse/abcdesktopcookie && \
+	chmod 666 /etc/pulse/abcdesktopcookie && \
+    mkdir --mode 777 /container
 
 ENV PULSE_SERVER=/tmp/.pulse.sock
 

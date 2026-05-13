@@ -1,5 +1,23 @@
 #!/bin/bash
 
+# ffmpeg.speaker.sh
+#
+# Purpose:
+# - Capture audio from the PulseAudio monitor source `speaker.monitor`.
+# - Transcode the live stream to MPEG-TS with MP2 audio.
+# - Write the resulting stream into the FIFO `/container/speaker`.
+#
+# Runtime contract:
+# - Input: PulseAudio server socket `${PULSE_SERVER}` (default: /tmp/.pulse.sock).
+# - Input: PulseAudio source `speaker.monitor`.
+# - Output: MPEG-TS audio stream to `/container/speaker`.
+# - Consumer: websocket relay process that reads `/container/speaker` and exposes TCP websocket audio.
+#
+# Environment variables:
+# - POD_IP: optional container IP override.
+# - PULSE_SERVER: PulseAudio unix socket path.
+# - WEBRELAY_INTERNAL_TCP_PORT: relay internal port metadata.
+
 # create vars
 export CONTAINER_IP_ADDR=${POD_IP:-$(hostname -i)}
 export PULSE_SERVER=${PULSE_SERVER:-/tmp/.pulse.sock}

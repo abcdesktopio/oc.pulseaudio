@@ -31,7 +31,6 @@ RUN DEBIAN_FRONTEND=noninteractive  apt-get update && apt-get install -y --no-in
 	libnss-extrausers \
 	ffmpeg \
 	gnupg \
-	libnss-extrausers \
 	curl && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*		
@@ -87,4 +86,4 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 USER pulse
 CMD [ "/docker-entrypoint.sh" ]
 # expose websockert tcp port
-EXPOSE 29788
+EXPOSE 29788 29789

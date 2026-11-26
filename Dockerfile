@@ -50,11 +50,11 @@ COPY etc/nsswitch.conf /etc/nsswitch.conf
 
 # install websocket-relay speaker
 WORKDIR /composer/node/websocket-relay.speaker
-RUN npm ci --omit=dev
+RUN npm i --omit=dev
 
 # install websocket-relay microphone
 WORKDIR /composer/node/websocket-relay.microphone
-RUN npm ci --omit=dev
+RUN npm i --omit=dev
 
 WORKDIR /
 
